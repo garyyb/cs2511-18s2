@@ -1,8 +1,10 @@
 package ref;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ArrayListBag<E> implements Bag<E> {
 	private final ArrayList<E> items;
@@ -19,6 +21,29 @@ public class ArrayListBag<E> implements Bag<E> {
 	@Override
 	public boolean contains(Object o) {
 		return items.contains(o);
+	}
+
+	@Override
+	public boolean containsAll(Bag<?> other) {
+		Map<Object, Long> frequencies = new HashMap<>();
+		Map<Object, Long> otherFrequencies = new HashMap<>();
+		
+		for (Object o : other) {
+			otherFrequencies.merge(o, new Long(1), Long::sum);
+		}
+		
+		for (Object o : this) {
+			frequencies.merge(o, new Long(1), Long::sum);
+		}
+		
+		for (Entry<?, Long> entry : otherFrequencies.entrySet()) {
+			Long frequency = frequencies.get(entry.getKey());
+			if (frequency == null || frequency < entry.getValue()) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	@Override
@@ -50,17 +75,15 @@ public class ArrayListBag<E> implements Bag<E> {
 	public Iterator<E> iterator() {
 		return items.iterator();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) return true;
 		if (obj == null) return false;
-		if (!(obj instanceof ArrayListBag<?>)) return false;
-		ArrayListBag<?> other = (ArrayListBag<?>) obj;
-		
-		this.items.sort(null);
-		other.items.sort(null);
-		
-		return this.items.equals(other.items);
+		if (!(obj instanceof Bag<?>)) return false;
+		Bag<?> other = (Bag<?>) obj;
+
+		if (this.size() != other.size()) return false;
+		return this.containsAll(other);
 	}
 }

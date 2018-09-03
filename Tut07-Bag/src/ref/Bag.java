@@ -17,6 +17,8 @@ public interface Bag<E> extends Iterable<E> {
 	 */
 	boolean contains(Object o);
 	
+	boolean containsAll(Bag<?> other);
+		
 	/**
 	 * Removes a single instance of the specified object from the Bag.
 	 * @param o Object to be removed.

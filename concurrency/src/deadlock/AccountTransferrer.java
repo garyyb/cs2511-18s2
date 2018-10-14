@@ -3,11 +3,11 @@ package deadlock;
 /**
  * Thread which performs account transfers.
  */
-public class AccountTransferer implements Runnable {
+public class AccountTransferrer implements Runnable {
     private Account from;
     private Account to;
 
-    public AccountTransferer(Account from, Account to) {
+    public AccountTransferrer(Account from, Account to) {
         this.from = from;
         this.to = to;
     }

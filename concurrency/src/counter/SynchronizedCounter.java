@@ -7,8 +7,10 @@ public class SynchronizedCounter implements Counter {
     private long count = 0;
 
     @Override
-    public synchronized void add(long value) {
-        count += value;
+    public void add(long value) {
+    	synchronized(this) {
+    		count += value;
+    	}
     }
 
     @Override
